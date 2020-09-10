@@ -14,9 +14,9 @@ public class GuruServicesImpl implements GuruServices {
 	private GuruRepository guruRepo;
 
 	@Override
-	public Guru cekDataGuru(int nip) {
-		Guru pi = guruRepo.cekData(nip);
-		return pi;
+	public int cekDataGuru(int nip) {
+		
+		return guruRepo.cekData(nip);
 	}
 
 }

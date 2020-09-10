@@ -49,19 +49,21 @@ public class GuruResource {
 	}
 
 	@PostMapping("/")
-	public Guru tambahAlien(@Validated @RequestBody Guru guru) {
-		Guru gurune = null;
+	public String tambahAlien(@Validated @RequestBody Guru guru) {
+		Guru gurune = new Guru();
+		String message = "";
 		try {
-			gurune = guruService.cekDataGuru(guru.getNip());
-			if(gurune == null) {
-				return repo.save(guru);
+			int tampung = guruService.cekDataGuru(guru.getNip());
+			if(tampung == 0) {
+				repo.save(guru);
+				message = "Sukses";
 			}else {
-				return null;
+				message = "Data Sudah Ada";
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		return null;
+		return message;
 	}
 
 	
