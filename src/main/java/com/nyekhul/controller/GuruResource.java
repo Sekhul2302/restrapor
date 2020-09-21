@@ -25,7 +25,7 @@ import com.nyekhul.services.GuruServices;
 public class GuruResource {
 	@Autowired
 	GuruRepository repo;
-	
+
 	@Autowired
 	GuruServices guruService;
 
@@ -34,13 +34,13 @@ public class GuruResource {
 
 		return (List<Guru>) repo.findAll();
 	}
-	
+
 	@GetMapping("/findByName")
-	public List<Guru> findGuruByName(@RequestParam(value = "nama_guru") String nama_guru){
+	public List<Guru> findGuruByName(@RequestParam(value = "nama_guru") String nama_guru) {
 		return (List<Guru>) repo.findGuruBynamaGuru(nama_guru);
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/detail/{id}")
 	public ResponseEntity<Guru> getGuruById(@PathVariable("id") int id) {
 		Guru guru = repo.findBynip(id);
 		if (guru == null)
@@ -48,16 +48,16 @@ public class GuruResource {
 		return ResponseEntity.ok().body(guru);
 	}
 
-	@PostMapping("/")
-	public String tambahAlien(@Validated @RequestBody Guru guru) {
+	@PostMapping("/save")
+	public String tambahGuru(@Validated @RequestBody Guru guru) {
 		Guru gurune = new Guru();
 		String message = "";
 		try {
-			int tampung = guruService.cekDataGuru(guru.getNip());
-			if(tampung == 0) {
+			int tampung = repo.cekData(guru.getNip());
+			if (tampung == 0) {
 				repo.save(guru);
 				message = "Sukses";
-			}else {
+			} else {
 				message = "Data Sudah Ada";
 			}
 		} catch (Exception e) {
@@ -66,33 +66,31 @@ public class GuruResource {
 		return message;
 	}
 
-	
-    
-//	@PutMapping("/{id}")
-//	public ResponseEntity<Guru> updateBuku(@PathVariable(value = "id") Integer id,
-//			@Validated @RequestBody Guru detailAlien) {
-//		Guru alien = repo.findAlienById(id);
-//		if (alien == null)
-//			return ResponseEntity.notFound().build();
-//		alien.setId(detailAlien.getId());
-//		alien.setName(detailAlien.getName());
-//		alien.setPoint(detailAlien.getPoint());
-//		Guru updatedAlien = repo.save(alien);
-//		return ResponseEntity.ok(updatedAlien);
-//	}
+	@PutMapping("/update/{id}")
+	public ResponseEntity<Guru> updateGuru(@PathVariable(value = "id") Integer id,
+			@Validated @RequestBody Guru dEetailGuru) {
+		Guru alien = repo.findBynip(id);
+		if (alien == null)
+			return ResponseEntity.notFound().build();
+		alien.setNip((dEetailGuru.getNip()));
+		alien.setNama_guru(dEetailGuru.getNama_guru());
+		alien.setRole((dEetailGuru.getRole()));
+		Guru updatedAlien = repo.save(alien);
+		return ResponseEntity.ok(updatedAlien);
+	}
 
-//	@DeleteMapping("/{id}")
-//	public String deleteBuku(@PathVariable(value = "id") Integer id) {
-//		Guru alien = repo.findAlienById(id);
-//		String result = "";
-//		if (alien == null) {
-//			result = "id " + id + " tidak ditemukan";
-//			return result;
-//		}
-//		result = "id " + id + " berhasil di hapus";
-//		repo.delete(alien);
-//		return result;
-//	}
+	@DeleteMapping("/delete/{id}")
+	public String deleteGuru(@PathVariable(value = "id") Integer id) {
+		Guru alien = repo.findBynip(id);
+		String result = "";
+		if (alien == null) {
+			result = "nip " + id + " tidak ditemukan";
+			return result;
+		}
+		result = "nip " + id + " berhasil di hapus";
+		repo.delete(alien);
+		return result;
+	}
 
 //	@GetMapping("/sortname")
 //	public List<Guru> sortbuku(@RequestParam(value = "name") String name) {

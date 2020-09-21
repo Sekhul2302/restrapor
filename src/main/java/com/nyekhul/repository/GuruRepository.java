@@ -16,8 +16,5 @@ public interface GuruRepository extends CrudRepository<Guru, Integer> {
 	@Query(value = "SELECT COUNT(nip) FROM tb_master_guru WHERE nip=?1", nativeQuery = true)
     public int cekData(int nip);
 	
-//	List<Guru> findByName(String nama);
-//
-//	@Query("FROM alien ORDER BY NAME ASC")
-//	List<Guru> urutByNamane(String query);
+	
 }
